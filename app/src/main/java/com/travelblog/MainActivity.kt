@@ -1,5 +1,6 @@
 package com.travelblog
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.travelblog.databinding.ActivityMainBinding
@@ -13,5 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.mainTextView.text = "Hello MyTrucking"
+
+        startActivity(Intent(this, BlogDetailsActivity::class.java))
     }
 }

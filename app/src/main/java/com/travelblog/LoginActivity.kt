@@ -20,7 +20,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (preferences.isLoggedIn()) {
             startMainActivity()
             finish()
@@ -37,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.textPasswordInput.editText
             ?.addTextChangedListener(createTextWatcher(binding.textPasswordInput))
+
     }
 
     private fun onLoginClicked() {
@@ -51,32 +51,6 @@ class LoginActivity : AppCompatActivity() {
         } else {
             performLogin()
         }
-    }
-
-    private fun createTextWatcher(textPasswordInput: TextInputLayout): TextWatcher? {
-        return object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence,
-                                           start: Int, count: Int, after: Int) {
-                // not needed
-            }
-
-            override fun onTextChanged(s: CharSequence,
-                                       start: Int, before: Int, count: Int) {
-                textPasswordInput.error = null
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                // not needed
-            }
-        }
-    }
-
-    private fun showErrorDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Login Failed")
-            .setMessage("Username or password is not correct. Please try again.")
-            .setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
-            .show()
     }
 
     private fun performLogin() {
@@ -95,5 +69,31 @@ class LoginActivity : AppCompatActivity() {
     private fun startMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showErrorDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Login Failed")
+            .setMessage("Username or password is not correct. Please try again.")
+            .setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+            .show()
+    }
+
+    private fun createTextWatcher(textPasswordInput: TextInputLayout): TextWatcher? {
+        return object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence,
+                                           start: Int, count: Int, after: Int) {
+                // not needed
+            }
+
+            override fun onTextChanged(s: CharSequence,
+                                       start: Int, before: Int, count: Int) {
+                textPasswordInput.error = null
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                // not needed
+            }
+        }
     }
 }
