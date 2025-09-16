@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.glide)
     implementation("com.squareup.okhttp3:okhttp:4.2.1")
     implementation("com.google.code.gson:gson:2.8.6")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

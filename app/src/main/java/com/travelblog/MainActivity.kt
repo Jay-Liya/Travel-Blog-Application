@@ -22,16 +22,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
+        binding.refreshLayout.setOnRefreshListener { // 1
+            loadData()
+        }
 
         loadData()
     }
 
     private fun loadData() {
+        binding.refreshLayout.isRefreshing = true
         BlogHttpClient.loadBlogArticles(
             onSuccess = { blogList: List<Blog> ->
+                binding.refreshLayout.isRefreshing = false
                 runOnUiThread { adapter.submitList(blogList) }
             },
             onError = {
+                binding.refreshLayout.isRefreshing = false
                 runOnUiThread { showErrorSnackbar() }
             }
         )
