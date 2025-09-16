@@ -2,6 +2,7 @@ package com.travelblog
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,6 +38,18 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
+
+        val searchItem = binding.materialToolbar.menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean = false
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return true
+            }
+        })
+
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
         binding.refreshLayout.setOnRefreshListener {
@@ -52,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             onSuccess = { blogList: List<Blog> ->
                 runOnUiThread {
                     binding.refreshLayout.isRefreshing = false
-                    adapter.submitList(blogList)
+                    adapter.setData(blogList)
                     sortData()
                 }
             },

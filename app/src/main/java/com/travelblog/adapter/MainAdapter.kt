@@ -13,12 +13,24 @@ import com.travelblog.http.Blog
 
 class MainAdapter(private val onItemClickListener: (Blog) -> Unit) : ListAdapter<Blog, MainViewHolder>(DIFF_CALLBACK) {
 
+    private var originalList: List<Blog> = ArrayList()
+
     fun sortByTitle() {
         submitList(currentList.sortedBy { blog -> blog.title })
     }
 
     fun sortByDate() {
         submitList(currentList.sortedBy { blog -> blog.getDateMillis() })
+    }
+
+    fun setData(list: List<Blog>) {
+        originalList = list
+        super.submitList(list)
+    }
+
+    fun filter(query: String) {
+        submitList(originalList
+            .filter { blog -> blog.title.contains(query, ignoreCase = true) })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
