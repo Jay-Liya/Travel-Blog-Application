@@ -12,7 +12,9 @@ import com.travelblog.http.BlogHttpClient
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter = MainAdapter()
+    private val adapter = MainAdapter { blog ->
+        BlogDetailsActivity.start(this, blog)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
-        binding.refreshLayout.setOnRefreshListener { // 1
+        binding.refreshLayout.setOnRefreshListener {
             loadData()
         }
 
@@ -33,12 +35,16 @@ class MainActivity : AppCompatActivity() {
         binding.refreshLayout.isRefreshing = true
         BlogHttpClient.loadBlogArticles(
             onSuccess = { blogList: List<Blog> ->
-                binding.refreshLayout.isRefreshing = false
-                runOnUiThread { adapter.submitList(blogList) }
+                runOnUiThread {
+                    binding.refreshLayout.isRefreshing = false
+                    adapter.submitList(blogList)
+                }
             },
             onError = {
-                binding.refreshLayout.isRefreshing = false
-                runOnUiThread { showErrorSnackbar() }
+                runOnUiThread {
+                    binding.refreshLayout.isRefreshing = false
+                    showErrorSnackbar()
+                }
             }
         )
     }
