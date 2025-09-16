@@ -2,6 +2,9 @@ package com.travelblog.http
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.text.SimpleDateFormat
+
+private val dateFormat = SimpleDateFormat("MMMM dd, yyyy")
 
 data class BlogData(val data: List<Blog>)
 
@@ -16,7 +19,10 @@ data class Blog(
     val views: Int,
     val rating: Float
 ) : Parcelable {
+
     fun getImageUrl() = BlogHttpClient.BASE_URL + BlogHttpClient.PATH + image
+
+    fun getDateMillis() = dateFormat.parse(date).time
 }
 
 @Parcelize

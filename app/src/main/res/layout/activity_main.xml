@@ -14,8 +14,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:menu="@menu/main_menu"
             app:title="Travel Blog"
             app:titleTextColor="@android:color/white" />
 

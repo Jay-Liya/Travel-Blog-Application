@@ -13,6 +13,14 @@ import com.travelblog.http.Blog
 
 class MainAdapter(private val onItemClickListener: (Blog) -> Unit) : ListAdapter<Blog, MainViewHolder>(DIFF_CALLBACK) {
 
+    fun sortByTitle() {
+        submitList(currentList.sortedBy { blog -> blog.title })
+    }
+
+    fun sortByDate() {
+        submitList(currentList.sortedBy { blog -> blog.getDateMillis() })
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemMainBinding.inflate(inflater, parent, false)
