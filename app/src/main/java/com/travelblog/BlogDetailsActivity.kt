@@ -60,4 +60,5 @@ class BlogDetailsActivity : AppCompatActivity() {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.imageAvatar)
     }
+
 }

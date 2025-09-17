@@ -16,11 +16,11 @@ class MainAdapter(private val onItemClickListener: (Blog) -> Unit) : ListAdapter
     private var originalList: List<Blog> = ArrayList()
 
     fun sortByTitle() {
-        submitList(currentList.sortedBy { blog -> blog.title })
+        submitList(originalList.sortedBy { blog -> blog.title })
     }
 
     fun sortByDate() {
-        submitList(currentList.sortedBy { blog -> blog.getDateMillis() })
+        submitList(originalList.sortedBy { blog -> blog.getDateMillis() })
     }
 
     fun setData(list: List<Blog>) {

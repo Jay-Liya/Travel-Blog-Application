@@ -10,7 +10,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.travelblog.adapter.MainAdapter
 import com.travelblog.databinding.ActivityMainBinding
 import com.travelblog.http.Blog
-import com.travelblog.http.BlogHttpClient
+import com.travelblog.repository.BlogRepository
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = MainAdapter { blog ->
         BlogDetailsActivity.start(this, blog)
     }
+    private val repository by lazy { BlogRepository(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,15 +55,25 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
         binding.refreshLayout.setOnRefreshListener {
-            loadData()
+            loadDataFromNetwork()
         }
 
-        loadData()
+        loadDataFromDatabase()
+        loadDataFromNetwork()
     }
 
-    private fun loadData() {
+    private fun loadDataFromDatabase() {
+        repository.loadDataFromDatabase { blogList: List<Blog> ->
+            runOnUiThread {
+                adapter.setData(blogList)
+                sortData()
+            }
+        }
+    }
+
+    private fun loadDataFromNetwork() {
         binding.refreshLayout.isRefreshing = true
-        BlogHttpClient.loadBlogArticles(
+        repository.loadDataFromNetwork(
             onSuccess = { blogList: List<Blog> ->
                 runOnUiThread {
                     binding.refreshLayout.isRefreshing = false
@@ -102,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             "Error during loading blog articles", Snackbar.LENGTH_INDEFINITE).run {
             setActionTextColor(resources.getColor(R.color.orange500))
             setAction("Retry") {
-                loadData()
+                loadDataFromNetwork()
                 dismiss()
             }
         }.show()
